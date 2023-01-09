@@ -52,7 +52,7 @@ from tensorflow_tts.utils import remove_outlier
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 
-def parse_and_config():
+def parse_and_config(param_list=None):
     """Parse arguments and set configuration parameters."""
     parser = argparse.ArgumentParser(
         description="Preprocess audio and text features "
@@ -103,7 +103,7 @@ def parse_and_config():
         choices=[0, 1, 2],
         help="Logging level. 0: DEBUG, 1: INFO and WARNING, 2: INFO, WARNING, and ERROR",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(args=param_list)
 
     # set logger
     FORMAT = "%(asctime)s (%(module)s:%(lineno)d) %(levelname)s: %(message)s"
@@ -347,9 +347,9 @@ def save_features_to_file(features, subdir, config):
         raise ValueError("'npy' is the only supported format.")
 
 
-def preprocess():
+def preprocess(param_list=None):
     """Run preprocessing process and compute statistics for normalizing."""
-    config = parse_and_config()
+    config = parse_and_config(param_list)
 
     dataset_processor = {
         "ljspeech": LJSpeechProcessor,
@@ -521,9 +521,9 @@ def gen_normal_mel(mel_path, scaler, config):
     )
 
 
-def normalize():
+def normalize(param_list=None):
     """Normalize mel spectrogram with pre-computed statistics."""
-    config = parse_and_config()
+    config = parse_and_config(param_list)
     if config["format"] == "npy":
         # init scaler with saved values
         scaler = StandardScaler()

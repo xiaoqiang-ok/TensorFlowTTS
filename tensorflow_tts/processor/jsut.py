@@ -19,7 +19,7 @@ import re
 
 import numpy as np
 import soundfile as sf
-import pyopenjtalk
+#import pyopenjtalk
 import yaml
 import librosa
 from dataclasses import dataclass
@@ -148,7 +148,7 @@ class JSUTProcessor(BaseProcessor):
         sequence = []
         # Check for curly braces and treat their contents as ARPAbet:
         if inference:
-            text = pyopenjtalk.g2p(text)
+            text = ""#pyopenjtalk.g2p(text)
             text = text.replace("I", "i")
             text = text.replace("U", "u")
             print(f"phoneme seq: {text}")
