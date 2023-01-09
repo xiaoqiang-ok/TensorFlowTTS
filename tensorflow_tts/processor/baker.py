@@ -662,16 +662,20 @@ class BakerProcessor(BaseProcessor):
 
     def text_to_sequence(self, text, inference=False):
         if inference:
-            pinyin = self.pinyin_parser(text, style=Style.TONE3, errors="ignore")
+            pinyin = self.pinyin_parser(text, style=Style.TONE3, errors="ignore")#Chinese text to pinyin
             new_pinyin = []
             for x in pinyin:
                 x = "".join(x)
+                if len(x) >= 2:  #synthesis"嗯" pinyin is "n2" which can not be divided to initial and final phonemes and would cause exception. "n2" convert to "en2" will solve this problem, simimarly to "n1,n3,n4,n5"
+                    if x[0] == 'n' and x[1] > '0' and x[1] < '5':
+                        tone_and_prosody = x[1:]
+                        x = 'en' + tone_and_prosody
                 if "#" not in x:
                     new_pinyin.append(x)
             phonemes = self.get_phoneme_from_char_and_pinyin(text, new_pinyin)
             text = " ".join(phonemes)
             print(f"phoneme seq: {text}")
-
+        #phonemes to id
         sequence = []
         for symbol in text.split():
             idx = self.symbol_to_id[symbol]
